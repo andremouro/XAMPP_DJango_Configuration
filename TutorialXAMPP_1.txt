@@ -1,0 +1,386 @@
+################################################
+################################################
+################TUTORIAL XAMPP##################
+################################################
+################################################
+
+1- Baixe XAMPP do site: 
+https://www.apachefriends.org/pt_br/download.html
+
+Siga todas as recomendações default e finalize a instalação.
+
+2- Abra o painel de controle do XAMPP. 
+Caso tenha fechado o instalador, encontre o diretório de xampp dentro de C: (ou OS(C:)). Dentro do diretório, haverá um aplicativo chamado xampp-control. Clique nele e inicialize o painel de controle.
+"C:\xampp"
+
+3- Vamos criar uma primeira página para ver se tudo está certo.
+
+#################################################
+#################################################
+#################PRIMEIRA PÁGINA#################
+#################################################
+
+1- Precisamos baixar um editor de texto que faça arquivos html e php. 
+
+2- No caso, podemos usar Notepad++ (https://notepad-plus-plus.org/downloads/)
+
+3- Feito o download, abra o notepad++ e escreva o seguinte código:
+<h1>Hello World</h1>
+
+4- Salve o arquivo como index.php (selecione a extenção php como tipo de arquivo)
+
+5- Para que o arquivo seja apresentado em nosso servidor, precisamos criar uma pasta dentro do diretório do XAMPP
+
+6- Encontre o diretório de xampp dentro de C: (ou OS(C:)). Dentro deste diretório, haverá uma pasta chamada 'htdocs' abra a pasta.
+"C:\xampp\htdocs"
+
+7- Dentro da pasta htdocs, crie uma nova pasta chamada 'first'. Abra a pasta 'first'.
+
+8- Dentro da pasta 'first' salve o arquivo index.php, criado no notepad++
+
+9- Pronto, a primeira página do servidor foi criada.
+
+###################################################
+###################################################
+###############VISUALIZAÇÃO DA PÁGINA##############
+###################################################
+
+1- Abra o xampp-control.
+
+2- Dentro do painel de controle do XAMPP, clique em 'Start' para o Apache e para o MySQL.
+
+3- Abra um browser e escreva na barra de busca 'localhost'. Isto irá abrir um dashboard do XAMPP.
+
+4- Agora escreva na barra de busca 'localhost/first'. Você deverá observar a página que criamos com 'Hello World'.
+
+
+####################################################
+####################################################
+##############PORTABILIDADE WORDPRESS###############
+####################################################
+####################################################
+
+#Parte 1: Criando o banco de dados.
+
+1- Para que seja possível instalar o WordPress em nosso servidor, é necessário criar um banco de dados para o nosso site.
+
+2- Abra o browser e escreva 'localhost' na barra de busca. Isto irá abrir o dashboard do XAMPP
+
+3- No dashboard, clique em 'phpMyAdmin' na barra de navegação do site (A barra que está escrito 'Apache Friends').
+
+4- Na página aberta, que é uma página para criação de banco de dados, clique em 'databases' (ou 'Base de Dados' se estiver em português).
+
+5- Agora crie um banco de dados com o nome 'mysite' e clique em criar. Pronto, um banco de dados para nosso site wordpress foi criado
+
+#Parte 2: Instalando o WordPress.
+
+1- Baixe o WordPress do site: https://br.wordpress.org/download/
+
+2- Extraia todo o conteúdo da pasta baixada para o diretório do site. 
+"C:\xampp\htdocs\first"
+
+3- Feita a extração, abra o browser e escreva:
+localhost/first/wp-admin/setup-config.php
+
+4- Isto irá abrir uma página de instalação do WordPress em seu site.
+
+5- Inicie a instalação. Quando for pedido o nome do Banco de Dados, coloque o nome do banco que criamos anteriormente ('mysite')
+
+6- Username é root, e o resto dos campos pode deixar como está.
+
+7- Siga os próximos passos e a instalação estará completa.
+
+8- Você pode criar uma página colocando o cursos em cima de 'Páginas' e selecionando 'Adicionar nova'.
+
+#https://elementor.com/academy/install-wordpress-xampp/
+
+##########################################################
+##########################################################
+##################PORTABILIDADE DJANGO####################
+##########################################################
+##########################################################
+
+1- É necessário fazer a instalação do pacote wsgi para windows. Este pacote provê um módulo do Apache que implementa uma interface WSGI para hospedar aplicações web baseadas em Python
+
+2- Baixe o código fonte de:
+https://github.com/GrahamDumpleton/mod_wsgi
+
+3- É necessário indicar o caminho dos diretórios em que o Apache está armazenado. No nosso caso, como estamos trabalhando com o XAMPP, o caminho não está no padrão 'C:/Apache24', mas sim em 'C:/xampp/apache'
+Portanto, faremos o redirecionamento do caminho do diretório para que a instalação ocorra com sucesso.
+
+4- Escreva no terminal:
+$env:MOD_WSGI_APACHE_ROOTDIR ="C:\xampp\apache"
+
+5- Agora baixe o mod_wsgi:
+pip install mod_wsgi
+
+6- Faremos a conexão do mod_wsgi com o Apache (dentro do Xampp). Para isso, corra o comando no terminal:
+mod_wsgi-express module-config
+
+7- Deverá aparecer algo semelhante em seu terminal:
+LoadFile "C:/Users/André/AppData/Local/Programs/Python/Python311/python311.dll"
+LoadModule wsgi_module "C:/Users/André/AppData/Local/Programs/Python/Python311/Lib/site-packages/mod_wsgi/server/mod_wsgi.cp311-win_amd64.pyd"
+WSGIPythonHome "C:/Users/André/AppData/Local/Programs/Python/Python311"
+
+8- Estas informações permitem configurar o Apache para carregar o módulo mod_wsgi and dizer ao mod_wsgi onde a instalação do Python está (dentro do seu diretório)
+Estas informações devem ser coladas dentro do arquivo 'httpd.conf' do Apache. Este arquivo deve estar dentro da pasta:
+"C:\xampp\apache\conf"
+
+9 - ADICIONAR EM httpd.conf. Isto permitirá que pacotes do Python sejam carregados no servidor
+WSGIApplicationGroup %{GLOBAL}
+
+10- Por fim, adicione a seguinte linha dentro do mesmo arquivo:
+#WSGI
+Include "conf/other/wsgi.conf"
+
+Isto permitirá carregar a configuração do wsgi dentro do Apache.
+
+11- Façamos um teste para verificar se a instalação ocorreu com sucesso.
+
+	a) crie a pasta wsgi dentro de htdocs.
+	
+	b) crie a pasta scripts dentro de wsgi
+	
+	c) cole o arquivo 'test.wsgi' dentro da pasta wsgi recém criada.
+	
+	d) dentro da pasta 'conf', localizada em ("C:\xampp\apache\conf\"), crie a pasta 'other'.
+	
+	e) dentro da pasta 'other' recém criada, cole o arquivo 'wsgi.conf'.
+	
+	f) abra o painel de controle do xampp e inicie o servidor e o mysql.
+	
+	g) abra o browser e escreva 'localhost/test'
+	
+	h) você deve ver a frase: 'Hello World!'. Neste caso a instalação foi feita com sucesso! Caso haja algum erro interno, abra o error.log dentro do Xampp e verifique as informações sobre o erro.
+	
+
+####################################################
+####################################################
+##############CARREGANDO PROJETO IRIS###############
+####################################################
+####################################################
+
+1- Agora precisamos configurar o XAMPP e o projeto Django para que a aplicação que criamos anteriormente seja hospedada em Apache.
+
+2- Abra o arquivo wsgi.conf e cole o seguinte código:
+
+	<Directory "C:/Users/André/PycharmProjects/IrisTutorial_Teste/iris/iris"> ##Cole aqui o caminho onde o projeto Django está armazenado. Deve ser algo similar ao que está aqui.
+	  Options ExecCGI Indexes
+	  AddHandler cgi-script .cgi
+	  AddHandler wsgi-script .wsgi  
+	  Order allow,deny
+	  Allow from all
+	  Require all granted
+	</Directory>
+	Alias /wsgi/ "C:/Users/André/PycharmProjects/IrisTutorial_Teste/iris/iris" ##Cole o mesmo caminho aqui
+	<IfModule wsgi_module>
+	  WSGIScriptAlias /test "C:/Users/André/PycharmProjects/IrisTutorial_Teste/iris/iris/wsgi.py" ##Cole o caminho que leva ao arquivo wsgi.py. Este arquivo é o que faz a comunicação entre o Apache e o Django.
+	</IfModule>	
+
+3- Agora precisamos configurar o arquivo wsgi.py para que a aplicação seja rodada em Apache. Abra o arquivo wsgi.py dentro do seu projeto Django (Deve estar em um caminho similar a este: "C:/Users/André/PycharmProjects/IrisTutorial_Teste/iris/iris/")
+
+4- Dentro deste arquivo cole o seguinte código:
+
+	import os
+	import sys
+
+	from django.core.wsgi import get_wsgi_application
+
+	path = 'C:/Users/André/PycharmProjects/IrisTutorial_Teste/iris'
+	if path not in sys.path:
+		sys.path.append(path)
+
+	os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iris.settings')
+
+	application = get_wsgi_application()
+
+5- Ao ativar o servidor no XAMPP e entrar em localhost/test você deve ver apenas a parte escrita da aplicação iris.
+
+6- Próximo passo é preparar o banco de dados 'iris' dentro do servidor mysql do XAMPP
+
+
+#################################################
+#################################################
+#########BASE DE DADOS MYSQL#####################
+#################################################
+#################################################
+
+1- Vamos subir os dados do nosso arquivo iris.csv para o banco de dados do servidor MySQL
+
+2- Para isso, vamos baixar o MySQL Workbench (https://www.mysql.com/products/workbench/)
+
+3- Abra o painel de controle do XAMPP e inicie os servidores Apache e MySQL
+
+4- Abra o MySQL Workbench. Clique em 'Database' e selecione 'Manage Connections'.
+
+5- Dê o nome da conexão de 'iris' e clique em 'Test Connection'. Caso dê certo, faça a conexão com esse banco de dados (já estará conectado com o servido MySQL do XAMPP)
+
+6- Conectado ao servidor, abrirá uma nova janela em que você poderá manipular esse banco de dados. 
+
+7- Primeiro, crie um novo 'Schema', clicando no ícone "Create a new schema in the connected server". Dê o nome 'iris'
+
+8- Dentro do esquema 'iris', clique com o botão direito em cima de 'Tables' e clique em 'Create Table'. Dê o nome de 'iris' à tabela criada.
+
+9- Preencha esta tabela com as colunas com os mesmos nomes que estão no arquivo 'iris.csv'. Não se esqueça de clicar em 'Apply' para confirmar a criação do banco de dados.
+
+10- Clique agora com o botão direito em cima da tabela 'iris' (no canto esquerdo da janela) e selecione a opção 'Table Data Import Wizard'. Selecione o arquivo 'iris.csv' e siga os passos do importador.
+
+11- Agora abra o navegador, e entre em 'localhost/phpmyadmin'. Você deve ver o 'iris' Schema e dentro dele você deve ver a tabela 'iris'. Abrindo a tabela 'iris' você deve ver todos os dados que estavam no csv.
+
+##############################################################
+##############################################################
+##############CONEXÃO DE MYSQL COM DJANGO#####################
+##############################################################
+##############################################################
+
+1- Agora precisamos fazer a conexão do banco de dados em mysql com o DJANGO. Neste caso, não usaremos a tabela criada anteriormente. Usaremos apenas o 'Schema' iris, que foi criado.
+
+2- Primeiro, instale pymysql no python
+pip install pymysql
+
+3- Feito isso, vamos configurar a base de dados usada pelo Django. Abra o arquivo settings.py (dentro do projeto iris, dentro do aplicativo irisjs).
+Substitua o DATABASES = {...} (que deve estar configurado com sqlite) por:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'iris', ##aqui é o nome do 'Schema' configurado dentro do servidor do MySQL
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST':'localhost',
+        'PORT': '3306',
+    }
+}
+
+4- Feito isso, faça as migrações escrevendo no terminal (para isso, vc deve estar na pasta iris, que contem o arquivo manage.py):
+python manage.py makemigrations
+python manage.py migrate
+
+5- Abra no browser 'localhost/phpmyadmin'. Dentro do 'Schema' iris, vc deve observar vários novos arquivos. Uma destas tabelas chama-se irisjs_file. Este é o modelo de Django usado para produzir os gráficos.
+Abrindo a tabela, vc verá que ela está vazia. Agora precisamos fazer o upload dos dados.
+
+6- No terminal do python escreva:
+python manage.py loaddata iris.json #este arquivo foi criado no nosso tutorial de como fazer um dashboard com Django).
+
+7- Os dados devem ter subido para a tabela. Confira o arquivo irisjs_file dentro do 'Schema' iris no phpmyadmin.
+
+8- Caso vc abra o servidor pelo python, vc observará os gráficos:
+python manage.py runserver
+
+9- No entanto, abrindo o servidor pelo apache, os gráficos não aparecem (isto será resolvido a seguir)
+localhost/test
+
+################################################################
+################################################################
+##########CONSTRUINDO GRÁFICOS COM OS DADOS NO MYSQL############
+################################################################
+################################################################
+
+1- Na versão anterior do nosso Dashboard Django, nós usamos um API que construimos usando o REST framework para acessar os dados e construir os gráficos.
+No entanto, este processo é mais complexo e exige a portabilidade de outras bibliotecas no XAMPP, o que pode complicar a manutenção do site. Assim, adaptaremos nosso Dashboard Iris
+para acessar os dados do MYSQL (o que fizemos anteriormente) e usaremos estes dados para construir nossos gráficos.
+
+2- Dentro do 'views.py' do nosso app 'irisjs', substitua todo o código pelo seguinte:
+
+	from django.shortcuts import render, redirect, get_object_or_404, reverse
+	from irisjs.models import File
+	from django.views.generic import View
+
+
+	class HomeView(View):  # definimos a classe HomeView que será chamada dentro do urls.py
+		def get(self, request, *args, **kwargs):  # esta classe fará que, quando requisitada (pela homepage da nossa aplicação web) seja renderizado o index.html (que está dentro de irisjs)
+			data = File.objects.all() # aqui nós pegamos todos os dados do nosso modelo e armazenamos em um objeto chamado 'data'
+			return render(request, 'irisjs/index.html', {'data': data}) #aqui faremos a renderização do index.html e usamos como contexto o 'data', que criamos na linha anterior
+			
+3- Faremos um teste para verificar se os dados estão sendo acessados com sucesso. Substitua o 'index.html' pelo seguinte conteúdo:
+
+	body>
+	<div class="container">
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+			<th>Species Name</th>
+			<th>Species ID</th>
+		  </tr>
+		</thead>
+		<tbody>
+		{% for sp in data %}
+		  <tr>
+			<td>{{sp.species}}</td>
+			<td>{{sp.id}}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	</table>
+	</div>
+	</body>
+	</html>
+	
+4- Abra o servidor no XAMPP e acesse 'localhost/test/'. Você deve observar uma tabela com o nome das espécies e seu ID.
+
+
+#########PARTE II##########
+
+1- Agora que confirmamos a conexão com o banco de dados, podemos começar a montar os gráficos.
+
+2- Nesta nova versão, montaremos os gráficos usando o pacote plotly do Python. Este pacote permite a criação de gráficos interativos e é de simples instalação.
+
+3- Primeiro, instale o pacote
+$ pip install plotly
+
+4- Apague todo o conteúdo dentro do views.py do app irisjs e cole o seguinte código:
+
+	from django.shortcuts import render, redirect, get_object_or_404, reverse
+	from irisjs.models import File
+	from django.views.generic import View
+	import pandas as pd
+	from plotly.offline import plot
+	import plotly.express as px
+
+
+
+	class HomeView(View):  # definimos a classe HomeView que será chamada dentro do urls.py
+		def get(self, request, *args, **kwargs):  # esta classe fará que, quando requisitada (pela homepage da nossa aplicação web) seja renderizado o index.html (que está dentro de irisjs)
+			data = File.objects.all() #criamos um objeto com todos os dados armazenados no nosso modelo
+			bar_chart = [		#criamos um dicionário, onde as chaves serão os nomes das colunas e os valores serão cada um dos valores de cada linha
+				{
+					'Sp': x.species,
+					'sp_length': x.sepal_length,
+					'sp_width': x.sepal_width
+				}for x in data
+			]
+			df = pd.DataFrame(bar_chart) #transformamos o dicionário em data frame, para podermos montar os gráficos com o plotly
+			fig = px.bar(df.groupby(['Sp']).mean().reset_index(), x='Sp',y='sp_length',color='Sp') #montamos o nosso gráfico de barras. Para isso, agrupamos o nosso data frame pelos valores da coluna sp, e calculamos a média da sepal_length.
+			fig2 = px.scatter(df, x='sp_width',y='sp_length',color='Sp') #montamos o gráfico de 'scatter' para observar a correlação entre comprimento e largura das sépalas.
+
+			bar_plot = plot(fig, output_type = 'div') #preparamos as figuras para serem renderizadas em html
+			scat_plot = plot(fig2, output_type='div')
+			ctx = {'plot_div':bar_plot, 'plot_div2':scat_plot} #e montamos o contexto para renderizar em nosso html
+
+			return render(request, 'irisjs/index.html', ctx)
+
+
+5- Substitua o conteúdo de urls.py por:
+	from django.contrib import admin
+	from django.urls import path
+	from irisjs import views
+
+	urlpatterns = [
+		path('admin/', admin.site.urls), #caminho /admin/ nos levará à página do administrador
+		path('', views.HomeView.as_view()), #homepage da nossa aplicação web. Dentro de views, irá usar a classe HomeView para abrir a página .html (index.html). Essa classe será implementada a seguir
+	]
+
+6- Veja que apagamos o caminho para o api, já que não usaremos mais.
+
+7- Abra o 'localhost/test' e você deverá ver os dois gráficos
+
+##############################################################
+##############################################################
+###########CRIAR PÁGINA WORDPRESS COM LINK PARA DJANGO########
+##############################################################
+##############################################################
+
+1- Entre no site wordpress ('localhost/first/wp-admin') e crie ou edite uma página.
+
+2- Dentro da página criada, crie um link que encaminhe para :'localhost/test'. Esse link irá encaminhar para o dashboard.
+
+3- Entre no site ('localhost/first') e teste o link. Se for encaminhado para o dashboard, tudo foi configurado corretamente.
